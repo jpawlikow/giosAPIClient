@@ -35,5 +35,10 @@ public class GIOSClient
         });
     }
 
-//    public List
+    public List<Sensor> fetchAllSensorsFromStation(int id) throws IOException, InterruptedException {
+        HttpResponse<String> response = _fetchData(String.format(Constants.FETCH_ALL_SENSORS_FROM_STATION_URI, id));
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.readValue(response.body(), new TypeReference<>() {
+        });
+    }
 }

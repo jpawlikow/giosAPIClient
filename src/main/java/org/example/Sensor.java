@@ -39,6 +39,15 @@ public class Sensor {
     public void setParam(SensorParam param) {
         this.param = param;
     }
+
+    @Override
+    public String toString() {
+        return "Sensor{" +
+                "id=" + id +
+                ", stationId='" + stationId + '\'' +
+                ", param=" + param.getParamName() +
+                '}';
+    }
 }
 
 //    "id": 92,
