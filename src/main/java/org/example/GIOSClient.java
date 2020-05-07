@@ -24,19 +24,26 @@ public class GIOSClient
 
     private HttpResponse<String> _fetchData(String uri) throws IOException, InterruptedException {
         HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = _prepareRequest(Constants.BASE_URL + uri);
+        HttpRequest request = _prepareRequest(uri);
         return client.send(request, HttpResponse.BodyHandlers.ofString());
     }
 
     public List<Station> fetchAllStations() throws IOException, InterruptedException {
-        HttpResponse<String> response = _fetchData(Constants.FETCH_ALL_STATIONS_URI);
+        HttpResponse<String> response = _fetchData(Constants.FETCH_ALL_STATIONS_URL);
         ObjectMapper mapper = new ObjectMapper();
         return mapper.readValue(response.body(), new TypeReference<>() {
         });
     }
 
     public List<Sensor> fetchAllSensorsFromStation(int id) throws IOException, InterruptedException {
-        HttpResponse<String> response = _fetchData(String.format(Constants.FETCH_ALL_SENSORS_FROM_STATION_URI, id));
+        HttpResponse<String> response = _fetchData(String.format(Constants.FETCH_ALL_SENSORS_FROM_STATION_URL, id));
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.readValue(response.body(), new TypeReference<>() {
+        });
+    }
+
+    public SensorData fetchSensorData(int id) throws IOException, InterruptedException {
+        HttpResponse<String> response = _fetchData(String.format(Constants.FETCH_SENSOR_DATA_URL, id));
         ObjectMapper mapper = new ObjectMapper();
         return mapper.readValue(response.body(), new TypeReference<>() {
         });

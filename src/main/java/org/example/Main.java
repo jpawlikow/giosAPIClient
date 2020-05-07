@@ -1,6 +1,7 @@
 package org.example;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 public class Main {
@@ -13,10 +14,14 @@ public class Main {
 //            System.out.println(station.getCity().getCommune());
 //        });
 
-        List<Sensor> sensors = client.fetchAllSensorsFromStation(10374);
-        sensors.forEach((sensor -> {
-            System.out.println(sensor);
-            System.out.println(sensor.getParam());
-        }));
+//        List<Sensor> sensors = client.fetchAllSensorsFromStation(10374);
+//        sensors.forEach((sensor -> {
+//            System.out.println(sensor);
+//            System.out.println(sensor.getParam());
+//        }));
+
+        SensorData sensorData = client.fetchSensorData(16147);
+        System.out.println(sensorData);
+        System.out.println(Arrays.toString(sensorData.getValues()));
     }
 }
