@@ -1,4 +1,4 @@
-package org.example;
+package com.java.api.gios.sensor;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

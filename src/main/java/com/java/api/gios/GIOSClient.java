@@ -1,7 +1,11 @@
-package org.example;
+package com.java.api.gios;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.java.api.gios.sensor.Sensor;
+import com.java.api.gios.sensor.SensorData;
+import com.java.api.gios.station.AirQualityIndex;
+import com.java.api.gios.station.Station;
 
 import java.io.IOException;
 import java.net.URI;
@@ -35,15 +39,22 @@ public class GIOSClient
         });
     }
 
-    public List<Sensor> fetchAllSensorsFromStation(int id) throws IOException, InterruptedException {
-        HttpResponse<String> response = _fetchData(String.format(Constants.FETCH_ALL_SENSORS_FROM_STATION_URL, id));
+    public List<Sensor> fetchAllSensorsFromStation(int stationId) throws IOException, InterruptedException {
+        HttpResponse<String> response = _fetchData(String.format(Constants.FETCH_ALL_SENSORS_FROM_STATION_URL, stationId));
         ObjectMapper mapper = new ObjectMapper();
         return mapper.readValue(response.body(), new TypeReference<>() {
         });
     }
 
-    public SensorData fetchSensorData(int id) throws IOException, InterruptedException {
-        HttpResponse<String> response = _fetchData(String.format(Constants.FETCH_SENSOR_DATA_URL, id));
+    public SensorData fetchSensorData(int sensorId) throws IOException, InterruptedException {
+        HttpResponse<String> response = _fetchData(String.format(Constants.FETCH_SENSOR_DATA_URL, sensorId));
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.readValue(response.body(), new TypeReference<>() {
+        });
+    }
+
+    public AirQualityIndex fetchStationAirQualityIndex(int stationId) throws IOException, InterruptedException {
+        HttpResponse<String> response = _fetchData(String.format(Constants.FETCH_STATION_AIR_QUALITY_URL, stationId));
         ObjectMapper mapper = new ObjectMapper();
         return mapper.readValue(response.body(), new TypeReference<>() {
         });

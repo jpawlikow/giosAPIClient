@@ -1,8 +1,6 @@
-package org.example;
+package com.java.api.gios.station;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 
 //@JsonInclude(JsonInclude.Include.NON_NULL)

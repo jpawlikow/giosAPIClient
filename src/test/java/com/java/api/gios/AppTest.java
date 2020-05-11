@@ -1,4 +1,4 @@
-package org.example;
+package com.java.api.gios;
 
 import static org.junit.Assert.assertTrue;
 

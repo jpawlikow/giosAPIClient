@@ -1,8 +1,12 @@
-package org.example;
+package com.java.api.gios.sensor;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.java.api.gios.Util;
 
+import java.text.ParseException;
 import java.util.Date;
+
+import static com.java.api.gios.Constants.DATE_FORMAT;
 
 public class SensorDataValue {
     @JsonProperty("date")
@@ -16,8 +20,8 @@ public class SensorDataValue {
     }
 
     @JsonProperty("date")
-    public void setDate(Date date) {
-        this.date = date;
+    public void setDate(String date) {
+        this.date = Util.parseDate(date);
     }
 
     @JsonProperty("value")
@@ -40,4 +44,4 @@ public class SensorDataValue {
 }
 
 //        "date": "2017-03-28 11:00:00",
-//         "value": 30.3018
+//        "value": 30.3018

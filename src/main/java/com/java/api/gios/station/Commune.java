@@ -1,4 +1,4 @@
-package org.example;
+package com.java.api.gios.station;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
