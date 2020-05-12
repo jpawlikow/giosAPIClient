@@ -6,7 +6,7 @@ public class Sensor {
     @JsonProperty("id")
     private int id;
     @JsonProperty("stationId")
-    private String stationId;
+    private int stationId;
     @JsonProperty("param")
     private SensorParam param;
 
@@ -21,12 +21,12 @@ public class Sensor {
     }
 
     @JsonProperty("stationId")
-    public String getStationId() {
+    public int getStationId() {
         return stationId;
     }
 
     @JsonProperty("stationId")
-    public void setStationId(String stationId) {
+    public void setStationId(int stationId) {
         this.stationId = stationId;
     }
 
@@ -44,7 +44,7 @@ public class Sensor {
     public String toString() {
         return "Sensor{" +
                 "id=" + id +
-                ", stationId='" + stationId + '\'' +
+                ", stationId=" + stationId +
                 ", param=" + param.getParamName() +
                 '}';
     }

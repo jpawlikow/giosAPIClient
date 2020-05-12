@@ -12,7 +12,10 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class GIOSClient
 {
@@ -59,4 +62,38 @@ public class GIOSClient
         return mapper.readValue(response.body(), new TypeReference<>() {
         });
     }
+
+    public List<Station> fetchStationFrom(String cityName) throws IOException, InterruptedException {
+        List<Station> allStations = fetchAllStations();
+        return allStations.stream().filter(station ->
+                station.getCity().getName().equals(cityName))
+                .collect(Collectors.toList());
+    }
+
+    public List<Sensor> fetchSensorFrom(String cityName) throws IOException, InterruptedException {
+        List<Station> requestedStations = fetchStationFrom(cityName);
+        List<Sensor> citySensors = new ArrayList<>();
+        requestedStations.forEach(station -> {
+            try {
+                citySensors.addAll(fetchAllSensorsFromStation(station.getId()));
+            } catch (IOException | InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+        return citySensors;
+    }
+
+    public List<SensorData> fetchSensorDataFrom(String cityName) throws IOException, InterruptedException {
+        List<Sensor> requestedSensors = fetchSensorFrom(cityName);
+        List<SensorData> sensorDataList = new ArrayList<>();
+        requestedSensors.forEach(sensor -> {
+            try {
+                sensorDataList.add(fetchSensorData(sensor.getId()));
+            } catch (IOException | InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+        return sensorDataList;
+    }
+
 }

@@ -32,5 +32,24 @@ public class Main {
 
         AirQualityIndex airQuaility = client.fetchStationAirQualityIndex(10374);
         System.out.println(airQuaility);
+
+        List<Station> opoleStations = client.fetchStationFrom("Opole");
+        opoleStations.forEach((station) -> {
+            System.out.println(station);
+            System.out.println(station.getCity());
+            System.out.println(station.getCity().getCommune());
+        });
+
+        List<Sensor> opoleSensors = client.fetchSensorFrom("Opole");
+        sensors.forEach((sensor -> {
+            System.out.println(sensor);
+            System.out.println(sensor.getParam());
+        }));
+
+        List<SensorData> opoleSensorData = client.fetchSensorDataFrom("Opole");
+        opoleSensorData.forEach((sensorData1 -> {
+            System.out.println(sensorData1);
+        }));
+
     }
 }
