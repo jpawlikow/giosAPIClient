@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.java.api.gios.sensor.Sensor;
 import com.java.api.gios.sensor.SensorData;
+import com.java.api.gios.sensor.SensorDataValue;
 import com.java.api.gios.station.AirQualityIndex;
 import com.java.api.gios.station.Station;
 
@@ -12,9 +13,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class GIOSClient
@@ -83,17 +82,49 @@ public class GIOSClient
         return citySensors;
     }
 
-    public List<SensorData> fetchSensorDataFrom(String cityName) throws IOException, InterruptedException {
+    public HashMap<Integer, List<SensorDataValue>> fetchSensorDataFrom(String cityName) throws IOException, InterruptedException {
         List<Sensor> requestedSensors = fetchSensorFrom(cityName);
-        List<SensorData> sensorDataList = new ArrayList<>();
+        HashMap<Integer, List<SensorDataValue>> sensorDataMap = new HashMap<Integer, List<SensorDataValue>>();
         requestedSensors.forEach(sensor -> {
             try {
-                sensorDataList.add(fetchSensorData(sensor.getId()));
+                sensorDataMap.put(sensor.getId(), Arrays.asList(fetchSensorData(sensor.getId()).getValues()));
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
             }
         });
-        return sensorDataList;
+        return sensorDataMap;
     }
 
+    public HashMap<Integer, List<SensorDataValue>> fetchSensorSpecificDataFrom(String cityName, String key)
+            throws IOException, InterruptedException {
+        return fetchSensorSpecificDataFrom(cityName, key, false);
+    }
+
+    public HashMap<Integer, List<SensorDataValue>> fetchSensorSpecificDataFrom(String cityName, String key, boolean latest)
+            throws IOException, InterruptedException {
+        List<Sensor> requestedSensors = fetchSensorFrom(cityName);
+        HashMap<Integer, List<SensorDataValue>> sensorDataMap = new HashMap<Integer, List<SensorDataValue>>();
+        requestedSensors.forEach(sensor -> {
+            try {
+                List<SensorDataValue> currentDataValue = new ArrayList<>();
+                if (sensor.getParam().getParamCode().equals(key)) {
+                    SensorData sensorDataSet = fetchSensorData(sensor.getId());
+                    List<SensorDataValue> sensorDataSetValues = Arrays.asList(sensorDataSet.getValues());
+                    if (latest) {
+                        Optional<SensorDataValue> firstValue = sensorDataSetValues.stream().filter(
+                                sensorDataValue -> sensorDataValue.getValue() != null).findFirst();
+                        if (firstValue.isPresent()) {
+                            currentDataValue.add(firstValue.get());
+                            sensorDataMap.put(sensor.getId(), currentDataValue);
+                        }
+                    } else {
+                        sensorDataMap.put(sensor.getId(), sensorDataSetValues);
+                    }
+                }
+            } catch (IOException | InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+        return sensorDataMap;
+    }
 }
