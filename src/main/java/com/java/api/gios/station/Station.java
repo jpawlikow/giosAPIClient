@@ -10,9 +10,9 @@ public class Station {
     @JsonProperty("stationName")
     private String stationName;
     @JsonProperty("gegrLat")
-    private String gegrLat;
+    private double gegrLat;
     @JsonProperty("gegrLon")
-    private String gegrLon;
+    private double gegrLon;
     @JsonProperty("city")
     private City city;
     @JsonProperty("addressStreet")
@@ -39,22 +39,22 @@ public class Station {
     }
 
     @JsonProperty("gegrLat")
-    public String getGegrLat() {
+    public double getGegrLat() {
         return gegrLat;
     }
 
     @JsonProperty("gegrLat")
-    public void setGegrLat(String gegrLat) {
+    public void setGegrLat(double gegrLat) {
         this.gegrLat = gegrLat;
     }
 
     @JsonProperty("gegrLon")
-    public String getGegrLon() {
+    public double getGegrLon() {
         return gegrLon;
     }
 
     @JsonProperty("gegrLon")
-    public void setGegrLon(String gegrLon) {
+    public void setGegrLon(double gegrLon) {
         this.gegrLon = gegrLon;
     }
 

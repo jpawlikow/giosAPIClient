@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 public class Main {
     public static void main(String[] args) throws IOException, InterruptedException {
@@ -54,18 +55,30 @@ public class Main {
 //            System.out.println(sensorData);
 //        });
         String param = "PM10";
-        HashMap<Integer, List<SensorDataValue>> opoleSomeSensorData = client.fetchSensorSpecificDataFrom("Opole", param);
-        opoleSomeSensorData.forEach((sensorId, sensorValues) -> {
-            System.out.println("Opole");
-            System.out.println(sensorId);
-            System.out.println(sensorValues);
-        });
-
-        HashMap<Integer, List<SensorDataValue>> wroclawSomeSensorData = client.fetchSensorSpecificDataFrom("Wrocław", param);
-        wroclawSomeSensorData.forEach((sensorId, sensorValues) -> {
-            System.out.println("Wrocław");
-            System.out.println(sensorId);
-            System.out.println(sensorValues);
-        });
+//        HashMap<Integer, List<SensorDataValue>> opoleSomeSensorData = client.fetchSensorSpecificDataFrom("Opole", param);
+//        opoleSomeSensorData.forEach((sensorId, sensorValues) -> {
+//            System.out.println("Opole");
+//            System.out.println(sensorId);
+//            System.out.println(sensorValues);
+//        });
+//
+//        HashMap<Integer, List<SensorDataValue>> wroclawSomeSensorData = client.fetchSensorSpecificDataFrom("Wrocław", param);
+//        wroclawSomeSensorData.forEach((sensorId, sensorValues) -> {
+//            System.out.println("Wrocław");
+//            System.out.println(sensorId);
+//            System.out.println(sensorValues);
+//        });
+//        Station station = client.findNearestStationFor(50.8275855, 15.5211659, "PM10");
+//        if (station != null) {
+//            System.out.println(station);
+//            System.out.println(station.getCity());
+//            System.out.println(station.getCity().getCommune());
+//        }
+        Sensor sensor = client.findNearestSensorFor(50.8275855, 15.5211659, "PM10");
+        if (sensor != null) {
+            System.out.println(sensor);
+            SensorDataValue lastValue = client.fetchLatestDataValueFrom(sensor.getId());
+            System.out.println(lastValue);
+        }
     }
 }

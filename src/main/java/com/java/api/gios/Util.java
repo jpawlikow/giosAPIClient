@@ -13,4 +13,8 @@ public class Util {
             return null;
         }
     }
+
+    public static double computeDistance(double srcLat, double srcLon, double dstLat, double dstLon) {
+        return Math.sqrt(Math.pow(dstLat - srcLat, 2) + Math.pow(dstLon - srcLon, 2));
+    }
 }

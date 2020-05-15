@@ -55,6 +55,18 @@ public class GIOSClient
         });
     }
 
+    public List<SensorDataValue> fetchDataValuesFrom(int sensorId) throws IOException, InterruptedException {
+        SensorData sensorData = fetchSensorData(sensorId);
+        return Arrays.asList(sensorData.getValues());
+    }
+
+    public SensorDataValue fetchLatestDataValueFrom(int sensorId) throws IOException, InterruptedException {
+        List<SensorDataValue> sensorDataValues = fetchDataValuesFrom(sensorId);
+        Optional<SensorDataValue> firstValue = sensorDataValues.stream().filter(
+                sensorDataValue -> sensorDataValue.getValue() != null).findFirst();
+        return firstValue.orElse(null);
+    }
+
     public AirQualityIndex fetchStationAirQualityIndex(int stationId) throws IOException, InterruptedException {
         HttpResponse<String> response = _fetchData(String.format(Constants.FETCH_STATION_AIR_QUALITY_URL, stationId));
         ObjectMapper mapper = new ObjectMapper();
@@ -126,5 +138,40 @@ public class GIOSClient
             }
         });
         return sensorDataMap;
+    }
+
+    public Station findNearestStationFor(double coordLat, double coordLon, String key) throws IOException, InterruptedException {
+        List<Integer> stationIdBlackList = new ArrayList<>();
+        List<Station> allStations = fetchAllStations();
+        HashMap<Integer, Double> distanceMap = new HashMap<Integer, Double>();
+        allStations.forEach(station -> {
+            distanceMap.put(station.getId(), Util.computeDistance(coordLat, coordLon, station.getGegrLat(), station.getGegrLon()));
+        });
+        Double smallestDistance = null;
+        Integer closestStation = null;
+        for (Integer stationId: distanceMap.keySet()) {
+            Double stationDistance = distanceMap.get(stationId);
+            if (smallestDistance == null || smallestDistance > stationDistance) {
+                if (fetchAllSensorsFromStation(stationId).stream().anyMatch(sensor -> sensor.getParam().getParamCode().equals(key))) {
+                    smallestDistance = stationDistance;
+                    closestStation = stationId;
+                }
+            }
+        };
+
+        if (closestStation != null) {
+            Integer finalClosestStation = closestStation;
+            Optional<Station> resultStation = allStations.stream().filter(station -> station.getId() == finalClosestStation).findFirst();
+            return resultStation.orElse(null);
+        }
+        return null;
+    }
+
+    public Sensor findNearestSensorFor(double coordLat, double coordLon, String key) throws IOException, InterruptedException {
+        Station nearestStation = findNearestStationFor(coordLat, coordLon, key);
+        if (nearestStation == null) return null;
+        Optional<Sensor> collectedSensor = fetchAllSensorsFromStation(nearestStation.getId()).stream().filter(
+                sensor -> sensor.getParam().getParamCode().equals(key)).findFirst();
+        return collectedSensor.orElse(null);
     }
 }
