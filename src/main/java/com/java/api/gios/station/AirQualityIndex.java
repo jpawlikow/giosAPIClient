@@ -1,12 +1,11 @@
 package com.java.api.gios.station;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.java.api.gios.Util;
 
 import java.util.Date;
 
-//@JsonInclude(JsonInclude.Include.NON_NULL)
+
 public class AirQualityIndex {
     @JsonProperty("id")
     private int id;

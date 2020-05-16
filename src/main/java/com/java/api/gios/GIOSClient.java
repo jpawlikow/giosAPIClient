@@ -16,6 +16,7 @@ import java.net.http.HttpResponse;
 import java.util.*;
 import java.util.stream.Collectors;
 
+// https://powietrze.gios.gov.pl/pjp/content/api
 public class GIOSClient
 {
     public GIOSClient() {}

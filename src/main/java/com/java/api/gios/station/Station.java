@@ -2,8 +2,7 @@ package com.java.api.gios.station;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-//@JsonInclude(JsonInclude.Include.NON_NULL)
-//@JsonPropertyOrder({ "id", "stationName", "gegrLat", "gegrLon", "city", "addressStreet" })
+
 public class Station {
     @JsonProperty("id")
     private int id;
